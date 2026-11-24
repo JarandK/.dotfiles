@@ -150,8 +150,33 @@ python3 setup.py --linkup
 GHOSTTY_BIN=$(command -v ghostty || true)
 if [ -n "$GHOSTTY_BIN" ]; then
     info "Setting Ghostty as default terminal emulator..."
+
+    # Works for GNOME and as a generic fallback
     sudo update-alternatives --install /usr/bin/x-terminal-emulator x-terminal-emulator "$GHOSTTY_BIN" 50
     sudo update-alternatives --set x-terminal-emulator "$GHOSTTY_BIN"
+
+    DE="${XDG_CURRENT_DESKTOP:-}"
+    case "$DE" in
+        *GNOME*|*gnome*|*ubuntu*|*Ubuntu*)
+            gsettings set org.gnome.settings-daemon.plugins.media-keys terminal "['<Primary><Alt>t']"
+            ;;
+        *KDE*|*kde*|*Plasma*|*plasma*)
+            # Add a custom global shortcut for Ghostty
+            kwriteconfig5 --file kglobalshortcutsrc \
+                --group "ghostty.desktop" \
+                --key "_launch" "Ctrl+Alt+T,none,Launch Ghostty" 2>/dev/null || \
+            warn "KDE detected — set ctrl+alt+t manually in System Settings → Shortcuts"
+            ;;
+        *XFCE*|*xfce*)
+            xfconf-query -c xfce4-keyboard-shortcuts \
+                -p "/commands/custom/<Primary><Alt>t" \
+                -s "ghostty" -n -t string 2>/dev/null || \
+            warn "XFCE detected — set ctrl+alt+t manually in Keyboard → Application Shortcuts"
+            ;;
+        *)
+            warn "Desktop '$DE' — ctrl+alt+t may need to be set manually in your keyboard shortcuts settings"
+            ;;
+    esac
 fi
 
 # ── Fish as default shell ─────────────────────────────────────────────────────
