@@ -158,10 +158,22 @@ if [ -n "$GHOSTTY_BIN" ]; then
     DE="${XDG_CURRENT_DESKTOP:-}"
     case "$DE" in
         *GNOME*|*gnome*|*ubuntu*|*Ubuntu*)
-            gsettings set org.gnome.settings-daemon.plugins.media-keys terminal "['<Primary><Alt>t']"
+            # Clear the built-in terminal shortcut and use a custom one instead.
+            # Modern GNOME ignores x-terminal-emulator for ctrl+alt+t, so we
+            # wire it directly to ghostty via the custom keybindings API.
+            KPATH="/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom-ghostty/"
+            gsettings set org.gnome.settings-daemon.plugins.media-keys terminal "[]"
+            # Merge ghostty into the custom-keybindings list (preserve any existing entries)
+            EXISTING=$(gsettings get org.gnome.settings-daemon.plugins.media-keys custom-keybindings)
+            if ! echo "$EXISTING" | grep -q "custom-ghostty"; then
+                NEW=$(echo "$EXISTING" | sed "s|]|, '$KPATH']|" | sed "s|@as \[\]|['$KPATH']|")
+                gsettings set org.gnome.settings-daemon.plugins.media-keys custom-keybindings "$NEW"
+            fi
+            gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:"$KPATH" name    'Ghostty'
+            gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:"$KPATH" command 'ghostty'
+            gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:"$KPATH" binding '<Primary><Alt>t'
             ;;
         *KDE*|*kde*|*Plasma*|*plasma*)
-            # Add a custom global shortcut for Ghostty
             kwriteconfig5 --file kglobalshortcutsrc \
                 --group "ghostty.desktop" \
                 --key "_launch" "Ctrl+Alt+T,none,Launch Ghostty" 2>/dev/null || \
