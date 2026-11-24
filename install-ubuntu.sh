@@ -59,20 +59,12 @@ else
     info "eza already installed"
 fi
 
-# ── Ghostty (via Flatpak — no Linux binaries in GitHub releases) ──────────────
-if ! command -v ghostty &>/dev/null && ! flatpak list 2>/dev/null | grep -q ghostty; then
-    info "Installing Ghostty via Flatpak..."
-    sudo apt-get install -y flatpak
-    flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
-    flatpak install -y flathub com.mitchellh.ghostty
-    # Make flatpak-installed ghostty available as 'ghostty' in PATH
-    if [ ! -f /usr/local/bin/ghostty ]; then
-        echo '#!/bin/sh' | sudo tee /usr/local/bin/ghostty > /dev/null
-        echo 'exec flatpak run com.mitchellh.ghostty "$@"' | sudo tee -a /usr/local/bin/ghostty > /dev/null
-        sudo chmod +x /usr/local/bin/ghostty
-    fi
+# ── Ghostty (via Snap) ────────────────────────────────────────────────────────
+if ! command -v ghostty &>/dev/null; then
+    info "Installing Ghostty via Snap..."
+    sudo snap install ghostty --classic
 else
-    info "Ghostty already installed"
+    info "Ghostty already installed ($(ghostty --version 2>&1 | head -1))"
 fi
 
 # ── Lazygit ───────────────────────────────────────────────────────────────────
