@@ -59,20 +59,17 @@ else
     info "eza already installed"
 fi
 
-# ── Ghostty ───────────────────────────────────────────────────────────────────
-if ! command -v ghostty &>/dev/null; then
-    info "Installing Ghostty..."
-    GHOSTTY_DEB=$(curl -s https://api.github.com/repos/ghostty-org/ghostty/releases/latest \
-        | grep "browser_download_url" \
-        | grep "x86_64.*\.deb" \
-        | head -1 \
-        | cut -d'"' -f4)
-    if [ -n "$GHOSTTY_DEB" ]; then
-        wget -O /tmp/ghostty.deb "$GHOSTTY_DEB"
-        sudo dpkg -i /tmp/ghostty.deb || sudo apt-get install -f -y
-        rm /tmp/ghostty.deb
-    else
-        warn "Could not find a Ghostty .deb — check https://github.com/ghostty-org/ghostty/releases"
+# ── Ghostty (via Flatpak — no Linux binaries in GitHub releases) ──────────────
+if ! command -v ghostty &>/dev/null && ! flatpak list 2>/dev/null | grep -q ghostty; then
+    info "Installing Ghostty via Flatpak..."
+    sudo apt-get install -y flatpak
+    flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+    flatpak install -y flathub com.mitchellh.ghostty
+    # Make flatpak-installed ghostty available as 'ghostty' in PATH
+    if [ ! -f /usr/local/bin/ghostty ]; then
+        echo '#!/bin/sh' | sudo tee /usr/local/bin/ghostty > /dev/null
+        echo 'exec flatpak run com.mitchellh.ghostty "$@"' | sudo tee -a /usr/local/bin/ghostty > /dev/null
+        sudo chmod +x /usr/local/bin/ghostty
     fi
 else
     info "Ghostty already installed"
