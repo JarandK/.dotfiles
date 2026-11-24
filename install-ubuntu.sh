@@ -133,19 +133,21 @@ else
     info "fzf already installed"
 fi
 
-# ── JetBrains Mono font ───────────────────────────────────────────────────────
-if ! fc-list | grep -qi "JetBrains Mono"; then
-    info "Installing JetBrains Mono font..."
-    VER=$(latest_github_release JetBrains/JetBrainsMono)
-    wget -q "https://github.com/JetBrains/JetBrainsMono/releases/download/v${VER}/JetBrainsMono-${VER}.zip" \
+# ── JetBrains Mono Nerd Font ──────────────────────────────────────────────────
+# Must be the Nerd Font variant — standard JetBrains Mono lacks the powerline
+# and icon glyphs used by Starship and the fish prompt.
+if ! fc-list | grep -qi "JetBrainsMono Nerd"; then
+    info "Installing JetBrains Mono Nerd Font..."
+    VER=$(latest_github_release ryanoasis/nerd-fonts)
+    wget -q "https://github.com/ryanoasis/nerd-fonts/releases/download/v${VER}/JetBrainsMono.zip" \
         -O /tmp/jbmono.zip
     unzip -q /tmp/jbmono.zip -d /tmp/jbmono
     mkdir -p "$HOME/.local/share/fonts"
-    cp /tmp/jbmono/fonts/ttf/*.ttf "$HOME/.local/share/fonts/"
+    cp /tmp/jbmono/*.ttf "$HOME/.local/share/fonts/"
     fc-cache -f
     rm -rf /tmp/jbmono.zip /tmp/jbmono
 else
-    info "JetBrains Mono already installed"
+    info "JetBrains Mono Nerd Font already installed"
 fi
 
 # ── TPM (tmux plugin manager) ─────────────────────────────────────────────────
