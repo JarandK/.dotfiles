@@ -150,6 +150,19 @@ else
     info "JetBrains Mono Nerd Font already installed"
 fi
 
+# Detect the exact installed font family name and write it to Ghostty's
+# per-machine config.local so it always matches what fontconfig sees.
+FONT_NAME=$(fc-list | grep -i "JetBrainsMono Nerd" | grep -v "Bold\|Italic\|Light\|Thin\|Medium\|ExtraBold" | head -1 | sed 's/.*:\([^:]*\):.*/\1/' | sed 's/^ *//' | sed 's/ *$//')
+if [ -n "$FONT_NAME" ]; then
+    info "Setting Ghostty font to: $FONT_NAME"
+    CONFIG_LOCAL="$HOME/.config/ghostty/config.local"
+    # Remove any existing font-family line and write the correct one
+    touch "$CONFIG_LOCAL"
+    grep -v "^font-family" "$CONFIG_LOCAL" > /tmp/ghostty_local || true
+    echo "font-family = $FONT_NAME" >> /tmp/ghostty_local
+    mv /tmp/ghostty_local "$CONFIG_LOCAL"
+fi
+
 # ── TPM (tmux plugin manager) ─────────────────────────────────────────────────
 if [ ! -d "$HOME/.tmux/plugins/tpm" ]; then
     info "Installing TPM (tmux plugin manager)..."
