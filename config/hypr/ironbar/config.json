@@ -38,8 +38,8 @@
 					"type": "button",
 					"label": "",
 					"tooltip": "Not recording – click to start",
-					"on_click": "!/home/skela/.dotfiles/config/hypr/scripts/toggle-recording.sh",
-					"show_if": "/home/skela/.dotfiles/config/hypr/scripts/recording-false.sh"
+					"on_click": "!$HOME/.dotfiles/config/hypr/scripts/toggle-recording.sh",
+					"show_if": "$HOME/.dotfiles/config/hypr/scripts/recording-false.sh"
 				}
 			]
 		},
@@ -50,8 +50,8 @@
 					"type": "button",
 					"label": "<span foreground=\"#ff5555\"></span>",
 					"tooltip": "Recording – click to stop",
-					"on_click": "!/home/skela/.dotfiles/config/hypr/scripts/toggle-recording.sh",
-					"show_if": "/home/skela/.dotfiles/config/hypr/scripts/recording-true.sh"
+					"on_click": "!$HOME/.dotfiles/config/hypr/scripts/toggle-recording.sh",
+					"show_if": "$HOME/.dotfiles/config/hypr/scripts/recording-true.sh"
 				}
 			]
 		},

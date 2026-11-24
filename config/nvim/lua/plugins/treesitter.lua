@@ -34,6 +34,7 @@ return {
 				-- "pkl",
 				"http",
 				"zig",
+				"c",
 				-- "openscad",
 			})
 			vim.list_extend(opts.indent, {

@@ -32,9 +32,7 @@ return {
 	},
 
 	{
-		-- "skela/quicktest.nvim",
-		-- branch = "feature/dart",
-		"quolpr/quicktest.nvim",
+"quolpr/quicktest.nvim",
 		-- dir = "~/code/quicktest.nvim/",
 		-- dev = { true },
 		config = function()

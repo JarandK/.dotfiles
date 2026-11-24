@@ -31,8 +31,6 @@ local rain_header = [[
 require("utils.env").get_hostname()
 local header = neovim_header
 local hostname = require("utils.env").get_hostname()
-if hostname == "dark" then header = easee_header end
-if hostname == "arc" then header = easee_header end
 if hostname == "aurora" then header = aurora_header end
 if hostname == "rain" then header = rain_header end
 
@@ -59,11 +57,11 @@ return {
 
 				preset = {
 					keys = {
-						{ icon = " ", key = "f", desc = "Find File", action = ":lua Snacks.dashboard.pick('files')" },
+						{ icon = " ", key = "f", desc = "Find File", action = ":lua Snacks.picker.pick('files')" },
 						{ icon = " ", key = "n", desc = "New File", action = ":ene | startinsert" },
-						{ icon = " ", key = "g", desc = "Find Text", action = ":lua Snacks.dashboard.pick('live_grep')" },
-						{ icon = " ", key = "r", desc = "Recent Files", action = ":lua Snacks.dashboard.pick('oldfiles')" },
-						{ icon = " ", key = "c", desc = "Config", action = ":lua Snacks.dashboard.pick('files', {cwd = vim.fn.stdpath('config')})" },
+						{ icon = " ", key = "g", desc = "Find Text", action = ":lua Snacks.picker.pick('live_grep')" },
+						{ icon = " ", key = "r", desc = "Recent Files", action = ":lua Snacks.picker.pick('oldfiles')" },
+						{ icon = " ", key = "c", desc = "Config", action = ":lua Snacks.picker.pick('files', {cwd = vim.fn.stdpath('config')})" },
 						{ icon = " ", key = "s", desc = "Restore Session", section = "session" },
 						{ icon = "󰒲 ", key = "l", desc = "Lazy", action = ":Lazy", enabled = package.loaded.lazy ~= nil },
 						{ icon = " ", key = "q", desc = "Quit", action = ":qa" },
@@ -121,6 +119,9 @@ return {
 				sources = {
 					lines = {
 						layout = "default",
+					},
+					lsp_references = {
+						include_declaration = true,
 					},
 					files = {
 						hidden = true,

@@ -30,7 +30,7 @@ return {
 			},
 			formatters = {
 				blink = {
-					command = "/home/skela/code/blink/target/release/blink",
+					command = "$HOME/code/blink/target/release/blink",
 					args = { "$FILENAME" },
 					stdin = false,
 					cwd = require("utils.env").root_file({ ".editorconfig", "pubspec.yaml" }),
@@ -48,7 +48,7 @@ return {
 					condition = function(_, ctx) return vim.fs.basename(ctx.filename) ~= "README.md" end,
 				},
 				ijfmt = {
-					command = "/home/skela/.dotfiles/scripts/ijfmt",
+					command = "$HOME/.dotfiles/scripts/ijfmt",
 					stdin = false,
 					args = { "$FILENAME" },
 					cwd = require("utils.env").root_file({

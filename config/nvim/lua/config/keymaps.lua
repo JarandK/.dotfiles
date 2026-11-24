@@ -60,7 +60,7 @@ map_normal("<leader>gb", cmd(":Gitsigns toggle_current_line_blame"), { desc = "T
 -- map_normal("<leader>aD", cmd(':lua vim.fn.system("rm -Rf ~/.local/state/nvim/avante")<CR>'), { desc = "Clear Avante", noremap = true, silent = true })
 
 -- Files
-map_common("<C-S>", cmd(":update<cr><esc>"), { desc = "Save file", remap = true })
+map_common("<C-S>", cmd(":noa up<cr><esc>"), { desc = "Save file", remap = true })
 map_normal("<leader>bs", cmd(":noa w"), { desc = "Save file without formatting", remap = true })
 map_normal("<leader>ft", cmd("Telescope filetypes"), { desc = "Select filetype for buffer", remap = true })
 
@@ -75,6 +75,16 @@ map_common("<C-f>", function() Snacks.picker.lines() end, { desc = "Search curre
 map_common("<C-t>", cmd("Telescope filetypes"), { desc = "Select filetype", remap = true })
 map_normal("<leader>cos", cmd("e .env"), { desc = "Open [s]ecret .env file", remap = true })
 map_normal("<leader>uS", cmd("Screenkey toggle"), { desc = "Toggle [S]creenkey", remap = true })
+map_normal("<leader>uW", function()
+	vim.api.nvim_set_hl(0, "ExtraWhitespace", { bg = "red" })
+	if vim.b.trailing_ws then
+		vim.cmd([[match]])
+		vim.b.trailing_ws = false
+	else
+		vim.cmd([[match ExtraWhitespace /\s\+$/]])
+		vim.b.trailing_ws = true
+	end
+end, { desc = "Toggle trailing [W]hitespace highlight", remap = true })
 
 map_normal("<leader>nl", cmd("Lazy"), { desc = "Open [l]azy package manager", remap = true })
 map_normal("<leader>nh", cmd("LazyHealth"), { desc = "Open lazy [h]ealth", remap = true })

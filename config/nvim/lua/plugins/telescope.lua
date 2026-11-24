@@ -1,6 +1,6 @@
 return {
 	{
-		"telescope.nvim",
+		"nvim-telescope/telescope.nvim",
 		dependencies = {
 			"nvim-telescope/telescope-fzf-native.nvim",
 			"nvim-telescope/telescope-dap.nvim",
@@ -27,8 +27,8 @@ return {
 				},
 				mappings = {
 					i = {
-						["<C-p>"] = require("telescope.actions.layout").toggle_preview,
-						["<esc>"] = require("utils.ui").close_picker,
+						["<C-p>"] = function(...) require("telescope.actions.layout").toggle_preview(...) end,
+						["<esc>"] = function(...) require("utils.ui").close_picker(...) end,
 					},
 				},
 			},

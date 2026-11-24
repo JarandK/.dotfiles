@@ -64,12 +64,12 @@ Tags = {
 -- run these commands on start up
 local startup_scripts = {
 
-	"sh /home/skela/.screenlayout/layout.sh",
+	"sh $HOME/.screenlayout/layout.sh",
 	"picom",
 	"variety &",
 	"dropbox",
 	-- "ibus-daemon -drx",
---   "sh /home/skela/.screenlayout/layout.sh",
+--   "sh $HOME/.screenlayout/layout.sh",
 --   -- Remap modifier keys when pressed alone
 --   --"xcape -e 'Control_L=Escape;Super_L=Hangul_Hanja;Super_R=Hangul'",  
 --   -- Other key remappings

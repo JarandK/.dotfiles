@@ -1,11 +1,12 @@
 local M = {}
 
-local state = require("telescope.state")
 local last_response = nil
+
+local function state() return require("telescope.state") end
 
 ---@diagnostic disable-next-line: unused-local
 M.save_picker_state = function(prompt_bufnr)
-	local picker = state.get_global_key("ui_picker")
+	local picker = state().get_global_key("ui_picker")
 	if picker ~= nil then
 		local data = {
 			filter_text = "",
@@ -13,14 +14,14 @@ M.save_picker_state = function(prompt_bufnr)
 		}
 		data.picker_state = { selected_item = vim.fn.getpos(".") }
 		local action_state = require("telescope.actions.state")
-		local text = action_state.get_current_line()
+		local text = action_state().get_current_line()
 		data.filter_text = text
-		state.set_global_key("ui_data." .. picker, data)
-		state.set_global_key("ui_picker", nil)
+		state().set_global_key("ui_data." .. picker, data)
+		state().set_global_key("ui_picker", nil)
 	end
 end
 
-M.load_picker_state = function(picker) return state.get_global_key("ui_data." .. picker) end
+M.load_picker_state = function(picker) return state().get_global_key("ui_data." .. picker) end
 
 M.load_picker_state_prompt = function(picker)
 	local restored_filter_text = ""
@@ -30,7 +31,7 @@ M.load_picker_state_prompt = function(picker)
 end
 
 M.open_picker = function(picker)
-	state.set_global_key("ui_picker", picker)
+	state().set_global_key("ui_picker", picker)
 	return M.load_picker_state_prompt(picker)
 end
 

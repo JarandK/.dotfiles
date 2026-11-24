@@ -65,14 +65,14 @@ function cdff { cd "`ff $@`"; };
 
 # Path Exports
 
-export PATH=$PATH:/Users/skela/Applications/Play
+export PATH=$PATH:$HOME/Applications/Play
 export PATH=$PATH:/Volumes/Mercury/Applications/Android/platform-tools
 export PATH=$PATH:/Volumes/Mercury/Applications/Android/build-tools/19.0.3
 export PATH=/opt/local/bin:/opt/local/sbin:$PATH
 
 
 ##
-# Your previous /Users/skela/.bash_profile file was backed up as /Users/skela/.bash_profile.macports-saved_2014-11-10_at_14:24:09
+# Your previous $HOME/.bash_profile file was backed up as $HOME/.bash_profile.macports-saved_2014-11-10_at_14:24:09
 ##
 
 # MacPorts Installer addition on 2014-11-10_at_14:24:09: adding an appropriate PATH variable for use with MacPorts.

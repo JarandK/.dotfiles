@@ -31,8 +31,6 @@ local rain_header = [[
 require("utils.env").get_hostname()
 local header = neovim_header
 local hostname = require("utils.env").get_hostname()
-if hostname == "dark" then header = easee_header end
-if hostname == "arc" then header = easee_header end
 if hostname == "aurora" then header = aurora_header end
 if hostname == "rain" then header = rain_header end
 

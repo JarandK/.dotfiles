@@ -19,7 +19,7 @@ theme='style-10'
 
 ## Run
 # rofi \
-# 	-modi clipboard:/home/skela/.dotfiles/scripts/cliphist-rofi \
+# 	-modi clipboard:$HOME/.dotfiles/scripts/cliphist-rofi \
 # 	-show clipboard \
 # 	-theme ${dir}/${theme}.rasi
 

@@ -59,10 +59,10 @@ if args.name == "work":
 		print(f"Workspace \"{args.name}\" already exists")
 	else:
 		mux.rename_workspace(args.name)
-		mux.create_tab("kit","~/code/easee/kit")
-		mux.create_tab("usr","~/code/easee/users")
-		mux.create_tab("ins","~/code/easee/installers")
-		mux.create_tab("api","~/code/easee/api")
+		mux.create_tab("kit","~/code/kit")
+		mux.create_tab("usr","~/code/users")
+		mux.create_tab("ins","~/code/installers")
+		mux.create_tab("api","~/code/api")
 
 elif args.name == "def":
 	exists = mux.does_workspace_exist(args.name)

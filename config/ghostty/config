@@ -4,7 +4,7 @@ app-notifications = no-clipboard-copy
 clipboard-read = allow
 clipboard-write = allow
 
-background-opacity = 0.93
+background-opacity = 1.0
 background = 000000
 
 font-family = "JetBrains Mono"

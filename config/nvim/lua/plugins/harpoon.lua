@@ -6,6 +6,13 @@ return {
 		dependencies = "nvim-lua/plenary.nvim",
 		config = function(_, _)
 			local harpoon = require("harpoon")
+			harpoon:setup({
+				default = {
+					display = function(list_item)
+						return list_item.value .. ":" .. list_item.context.row .. ":" .. list_item.context.col
+					end,
+				},
+			})
 			vim.keymap.set("n", "<leader>ha", function() harpoon:list():add() end, { desc = "Harpoon Append" })
 			vim.keymap.set("n", "<C-e>", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end, { desc = "Harpoon Quick Menu" })
 			vim.keymap.set("n", "<leader>hm", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end, { desc = "Harpoon Quick Menu" })

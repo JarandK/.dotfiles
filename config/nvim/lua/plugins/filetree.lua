@@ -18,6 +18,13 @@ return {
 			position = "right",
 			width = 60,
 		},
+		filesystem = {
+			filtered_items = {
+				visible = true,
+				hide_dotfiles = false,
+				hide_gitignored = false,
+			},
+		},
 	},
 	keys = {
 		{

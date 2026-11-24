@@ -2,7 +2,10 @@ return {
 	{
 		"stevearc/conform.nvim",
 		opts = {
+			format_on_save = false,
 			formatters_by_ft = {
+				["sh"] = {},
+				["bash"] = {},
 				["javascript"] = { "biome" },
 				["javascriptreact"] = { "biome" },
 				["typescript"] = { "biome" },
@@ -19,7 +22,9 @@ return {
 				["markdown.mdx"] = { "prettier" },
 				["graphql"] = { "prettier" },
 				["handlebars"] = { "prettier" },
-				["dart"] = { "blink" },
+				["c"] = { "clang_format" },
+			["cpp"] = { "clang_format" },
+			["dart"] = { "blink" },
 				["python"] = { "yapf" },
 				["swift"] = { "swift_format_ext" },
 				["kotlin"] = { "ijfmt" },
@@ -29,7 +34,7 @@ return {
 			},
 			formatters = {
 				blink = {
-					command = "/home/skela/code/blink/target/release/blink",
+					command = "$HOME/code/blink/target/release/blink",
 					args = { "$FILENAME" },
 					stdin = false,
 					cwd = require("conform.util").root_file({ ".editorconfig", "pubspec.yaml" }),
@@ -47,7 +52,7 @@ return {
 					condition = function(_, ctx) return vim.fs.basename(ctx.filename) ~= "README.md" end,
 				},
 				ijfmt = {
-					command = "/home/skela/.dotfiles/scripts/ijfmt",
+					command = "$HOME/.dotfiles/scripts/ijfmt",
 					stdin = false,
 					args = { "$FILENAME" },
 					cwd = require("conform.util").root_file({

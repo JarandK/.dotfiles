@@ -365,7 +365,7 @@ function __auto_source_venv --on-variable PWD --description "Activate/Deactivate
         # While we are still inside the git directory, find the closest
         # virtualenv starting from the current directory.
         while string match "$gitdir*" "$cwd" &>/dev/null
-            if test -e "$cwd/.venv/bin/activate.fish"
+            if test -e "$cwd/.venv/bin/activate.fish" -a -e "$cwd/pyproject.toml"
                 source "$cwd/.venv/bin/activate.fish" &>/dev/null
                 uv sync -q
                 return
@@ -421,10 +421,6 @@ function start
     ~/.dotfiles/.venv/bin/python ~/.dotfiles/scripts/start.py
 end
 
-function reload_signatures
-    sudo pacman -Sy archlinux-keyring
-    sudo pacman -Sy endeavouros-keyring
-end
 
 function ezals --wraps=eza --description 'Wrapper for eza with custom behavior'
     # Loop through the arguments, skipping flags and their values
@@ -652,10 +648,6 @@ function reload_aliases -d "Reload aliases"
             if [ -f ~/.dotfiles/aliases_linux ]
                 . ~/.dotfiles/aliases_linux
             end
-        case Darwin
-            if [ -f ~/.dotfiles/aliases_osx ]
-                . ~/.dotfiles/aliases_osx
-            end
     end
 
     alias assume="source /usr/bin/assume.fish"
@@ -670,10 +662,9 @@ function reload -d "Reload Config"
     reload_variables
 end
 
-loadenv ~/.dotfiles/private/.env
-
 reload_aliases
 reload_variables
 
 zoxide init fish | source
 starship init fish | source
+set -gx PATH ~/toolchains/gcc-arm-none-eabi-6-2017-q2-update/bin $PATH

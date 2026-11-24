@@ -8,28 +8,24 @@ return {
 				"codelldb",
 				"dart-debug-adapter",
 				"debugpy",
-				"docker-compose-language-service",
-				"dockerfile-language-server",
 				"gofumpt",
 				"goimports",
 				"gopls",
 				"hadolint",
-				"js-debug-adapter",
 				"kotlin-debug-adapter",
 				"kotlin-language-server",
 				"lua-language-server",
 				"omnisharp",
 				"prettier",
-				-- "pyright",
 				"rust-analyzer",
 				"shellcheck",
 				"shfmt",
 				"stylua",
-				"vtsls",
 				"yapf",
 				"zls",
 				"ols",
-				"openscad-lsp",
+				"clangd",
+				"pyright",
 			},
 		},
 	},
@@ -97,26 +93,6 @@ return {
 						{ "L", function() require("utils.ui").show_code_options() end },
 					},
 				},
-				openscad_lsp = {
-					keys = {
-						{
-							"<leader>cv",
-							function()
-								local file = vim.api.nvim_buf_get_name(0)
-								if file == "" then
-									vim.notify("No file path for current buffer", vim.log.levels.WARN)
-									return
-								end
-
-								local job_id = vim.fn.jobstart({ "openscad", file }, { detach = true })
-								if job_id <= 0 then
-									vim.notify("Failed to launch OpenSCAD", vim.log.levels.ERROR)
-								end
-							end,
-							desc = "Open current SCAD file in OpenSCAD",
-						},
-					},
-				},
 				sourcekit = {
 					on_attach = function(client, _)
 						client.server_capabilities.documentFormattingProvider = false
@@ -125,8 +101,6 @@ return {
 				},
 				ols = {},
 				kotlin_language_server = {},
-				dockerls = {},
-				docker_compose_language_service = {},
 				rust_analyzer = {
 					-- keys = require("config.keymaps").rust(),
 					-- keys = keymaps(),
@@ -142,7 +116,12 @@ return {
 					-- on_attach = on_attach,
 				},
 				zls = {},
+				omnisharp = {},
+				clangd = {},
 				pyright = {},
+				jsonls = { mason = false, enabled = false },
+				ruff = { mason = false, enabled = false },
+				fsautocomplete = { mason = false, enabled = false },
 			},
 			setup = {
 				rust_analyzer = function(_, opts)
@@ -150,7 +129,6 @@ return {
 					require("rust-tools").setup(vim.tbl_deep_extend("force", rust_tools_opts or {}, { server = opts }))
 					return true
 				end,
-				pyright = function(_, _) require("dap-python").setup() end,
 			},
 		},
 	},
