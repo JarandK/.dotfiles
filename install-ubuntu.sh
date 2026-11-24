@@ -34,27 +34,37 @@ sudo apt-get install -y \
     btop \
     gh
 
-# ── Neovim (PPA for latest stable) ───────────────────────────────────────────
+# ── Neovim ───────────────────────────────────────────────────────────────────
+# Ubuntu 26.04+ ships a recent neovim in apt; older releases need the PPA.
 if ! command -v nvim &>/dev/null; then
     info "Installing Neovim..."
-    sudo add-apt-repository -y ppa:neovim-ppa/unstable
-    sudo apt-get update -qq
-    sudo apt-get install -y neovim
+    if sudo apt-get install -y neovim 2>/dev/null && nvim --version | grep -q "^NVIM v0\.[1-9][0-9]"; then
+        info "Neovim installed from apt ($(nvim --version | head -1))"
+    else
+        info "apt neovim too old, adding PPA..."
+        sudo add-apt-repository -y ppa:neovim-ppa/unstable
+        sudo apt-get update -qq
+        sudo apt-get install -y neovim
+    fi
 else
     info "Neovim already installed ($(nvim --version | head -1))"
 fi
 
 # ── eza ───────────────────────────────────────────────────────────────────────
+# Ubuntu 26.04+ includes eza in the official repos; older releases need the
+# gierens.de third-party repo.
 if ! command -v eza &>/dev/null; then
     info "Installing eza..."
-    sudo mkdir -p /etc/apt/keyrings
-    wget -qO- https://raw.githubusercontent.com/eza-community/eza/main/deb.asc \
-        | sudo gpg --dearmor -o /etc/apt/keyrings/gierens.gpg
-    echo "deb [signed-by=/etc/apt/keyrings/gierens.gpg] http://deb.gierens.de stable main" \
-        | sudo tee /etc/apt/sources.list.d/gierens.list > /dev/null
-    sudo chmod 644 /etc/apt/keyrings/gierens.gpg /etc/apt/sources.list.d/gierens.list
-    sudo apt-get update -qq
-    sudo apt-get install -y eza
+    if ! sudo apt-get install -y eza 2>/dev/null; then
+        sudo mkdir -p /etc/apt/keyrings
+        wget -qO- https://raw.githubusercontent.com/eza-community/eza/main/deb.asc \
+            | sudo gpg --dearmor -o /etc/apt/keyrings/gierens.gpg
+        echo "deb [signed-by=/etc/apt/keyrings/gierens.gpg] http://deb.gierens.de stable main" \
+            | sudo tee /etc/apt/sources.list.d/gierens.list > /dev/null
+        sudo chmod 644 /etc/apt/keyrings/gierens.gpg /etc/apt/sources.list.d/gierens.list
+        sudo apt-get update -qq
+        sudo apt-get install -y eza
+    fi
 else
     info "eza already installed"
 fi
