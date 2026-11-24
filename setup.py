@@ -25,7 +25,6 @@ folder_links = [
 	FolderLink("config/kitty"),
 	FolderLink("config/alacritty"),
 	FolderLink("config/wezterm"),
-	FolderLink("config/qtile"),
 	FolderLink("config/hypr"),
 	FolderLink("config/hypr/swaylock"),
 	FolderLink("config/xfce4"),
