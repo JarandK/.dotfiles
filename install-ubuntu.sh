@@ -83,6 +83,13 @@ else
     info "AnyDesk already installed"
 fi
 
+# AnyDesk doesn't support Wayland natively — force it to use XWayland
+# by patching its desktop entry. Safe to run on X11 too (no effect).
+if [ -f /usr/share/applications/anydesk.desktop ]; then
+    sudo sed -i 's|^Exec=anydesk|Exec=env GDK_BACKEND=x11 DISPLAY=:0 anydesk|' \
+        /usr/share/applications/anydesk.desktop
+fi
+
 # ── Ghostty (via Snap) ────────────────────────────────────────────────────────
 if ! command -v ghostty &>/dev/null; then
     info "Installing Ghostty via Snap..."
