@@ -62,8 +62,11 @@ fi
 # ── AnyDesk ──────────────────────────────────────────────────────────────────
 if ! command -v anydesk &>/dev/null; then
     info "Installing AnyDesk..."
-    wget -qO - https://keys.anydesk.com/repos/DEB-GPG-KEY | sudo apt-key add -
-    echo "deb http://deb.anydesk.com/ all main" | sudo tee /etc/apt/sources.list.d/anydesk-stable.list > /dev/null
+    sudo mkdir -p /etc/apt/keyrings
+    wget -qO- https://keys.anydesk.com/repos/DEB-GPG-KEY \
+        | sudo gpg --dearmor -o /etc/apt/keyrings/anydesk.gpg
+    echo "deb [signed-by=/etc/apt/keyrings/anydesk.gpg] http://deb.anydesk.com/ all main" \
+        | sudo tee /etc/apt/sources.list.d/anydesk-stable.list > /dev/null
     sudo apt-get update -qq
     sudo apt-get install -y anydesk
 else
