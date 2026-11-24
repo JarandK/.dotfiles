@@ -146,6 +146,14 @@ info "Linking up configs..."
 cd "$DOTFILES"
 python3 setup.py --linkup
 
+# ── Ghostty as default terminal (ctrl+alt+t) ─────────────────────────────────
+GHOSTTY_BIN=$(command -v ghostty || true)
+if [ -n "$GHOSTTY_BIN" ]; then
+    info "Setting Ghostty as default terminal emulator..."
+    sudo update-alternatives --install /usr/bin/x-terminal-emulator x-terminal-emulator "$GHOSTTY_BIN" 50
+    sudo update-alternatives --set x-terminal-emulator "$GHOSTTY_BIN"
+fi
+
 # ── Fish as default shell ─────────────────────────────────────────────────────
 FISH_PATH=$(command -v fish || true)
 if [ -n "$FISH_PATH" ] && [ "$SHELL" != "$FISH_PATH" ]; then
