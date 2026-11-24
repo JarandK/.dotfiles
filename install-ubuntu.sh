@@ -133,6 +133,21 @@ else
     info "fzf already installed"
 fi
 
+# ── JetBrains Mono font ───────────────────────────────────────────────────────
+if ! fc-list | grep -qi "JetBrains Mono"; then
+    info "Installing JetBrains Mono font..."
+    VER=$(latest_github_release JetBrains/JetBrainsMono)
+    wget -q "https://github.com/JetBrains/JetBrainsMono/releases/download/v${VER}/JetBrainsMono-${VER}.zip" \
+        -O /tmp/jbmono.zip
+    unzip -q /tmp/jbmono.zip -d /tmp/jbmono
+    mkdir -p "$HOME/.local/share/fonts"
+    cp /tmp/jbmono/fonts/ttf/*.ttf "$HOME/.local/share/fonts/"
+    fc-cache -f
+    rm -rf /tmp/jbmono.zip /tmp/jbmono
+else
+    info "JetBrains Mono already installed"
+fi
+
 # ── TPM (tmux plugin manager) ─────────────────────────────────────────────────
 if [ ! -d "$HOME/.tmux/plugins/tpm" ]; then
     info "Installing TPM (tmux plugin manager)..."
@@ -166,7 +181,11 @@ if [ -n "$GHOSTTY_BIN" ]; then
             # Merge ghostty into the custom-keybindings list (preserve any existing entries)
             EXISTING=$(gsettings get org.gnome.settings-daemon.plugins.media-keys custom-keybindings)
             if ! echo "$EXISTING" | grep -q "custom-ghostty"; then
-                NEW=$(echo "$EXISTING" | sed "s|]|, '$KPATH']|" | sed "s|@as \[\]|['$KPATH']|")
+                if [ "$EXISTING" = "@as []" ] || [ "$EXISTING" = "[]" ]; then
+                    NEW="['$KPATH']"
+                else
+                    NEW=$(echo "$EXISTING" | sed "s|]$|, '$KPATH']|")
+                fi
                 gsettings set org.gnome.settings-daemon.plugins.media-keys custom-keybindings "$NEW"
             fi
             gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:"$KPATH" name    'Ghostty'
