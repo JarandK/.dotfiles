@@ -83,11 +83,16 @@ else
     info "AnyDesk already installed"
 fi
 
-# AnyDesk doesn't support Wayland natively — force it to use XWayland
-# by patching its desktop entry. Safe to run on X11 too (no effect).
-if [ -f /usr/share/applications/anydesk.desktop ]; then
-    sudo sed -i 's|^Exec=anydesk|Exec=env GDK_BACKEND=x11 DISPLAY=:0 anydesk|' \
-        /usr/share/applications/anydesk.desktop
+# AnyDesk remote desktop doesn't work on Wayland (screen capture is blocked
+# by Wayland's security model). Disable Wayland in GDM so the session uses
+# Xorg, which AnyDesk fully supports. Safe on X11-only machines too.
+if [ -f /etc/gdm3/custom.conf ]; then
+    sudo sed -i 's/#WaylandEnable=false/WaylandEnable=false/' /etc/gdm3/custom.conf
+    # If the line wasn't there at all, add it under [daemon]
+    if ! grep -q "WaylandEnable=false" /etc/gdm3/custom.conf; then
+        sudo sed -i '/\[daemon\]/a WaylandEnable=false' /etc/gdm3/custom.conf
+    fi
+    info "Wayland disabled in GDM — log out and back in for AnyDesk to work"
 fi
 
 # ── Ghostty (via Snap) ────────────────────────────────────────────────────────
