@@ -7,7 +7,7 @@ clipboard-write = allow
 background-opacity = 1.0
 background = 000000
 
-font-family = "JetBrainsMono Nerd Font"
+font-family = "JetBrains Mono"
 font-size = 14
 
 window-decoration = true

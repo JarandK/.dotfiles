@@ -133,34 +133,25 @@ else
     info "fzf already installed"
 fi
 
-# ── JetBrains Mono Nerd Font ──────────────────────────────────────────────────
-# Must be the Nerd Font variant — standard JetBrains Mono lacks the powerline
-# and icon glyphs used by Starship and the fish prompt.
-if ! fc-list | grep -qi "JetBrainsMono Nerd"; then
-    info "Installing JetBrains Mono Nerd Font..."
-    VER=$(latest_github_release ryanoasis/nerd-fonts)
-    wget -q "https://github.com/ryanoasis/nerd-fonts/releases/download/v${VER}/JetBrainsMono.zip" \
-        -O /tmp/jbmono.zip
-    unzip -q /tmp/jbmono.zip -d /tmp/jbmono
-    mkdir -p "$HOME/.local/share/fonts"
-    cp /tmp/jbmono/*.ttf "$HOME/.local/share/fonts/"
-    fc-cache -f
-    rm -rf /tmp/jbmono.zip /tmp/jbmono
-else
-    info "JetBrains Mono Nerd Font already installed"
-fi
+# ── Fonts ─────────────────────────────────────────────────────────────────────
+# JetBrains Mono — main terminal font (available in apt)
+sudo apt-get install -y fonts-jetbrains-mono
 
-# Detect the exact installed font family name and write it to Ghostty's
-# per-machine config.local so it always matches what fontconfig sees.
-FONT_NAME=$(fc-list | grep -i "JetBrainsMono Nerd" | grep -v "Bold\|Italic\|Light\|Thin\|Medium\|ExtraBold" | head -1 | sed 's/.*:\([^:]*\):.*/\1/' | sed 's/^ *//' | sed 's/ *$//')
-if [ -n "$FONT_NAME" ]; then
-    info "Setting Ghostty font to: $FONT_NAME"
-    CONFIG_LOCAL="$HOME/.config/ghostty/config.local"
-    # Remove any existing font-family line and write the correct one
-    touch "$CONFIG_LOCAL"
-    grep -v "^font-family" "$CONFIG_LOCAL" > /tmp/ghostty_local || true
-    echo "font-family = $FONT_NAME" >> /tmp/ghostty_local
-    mv /tmp/ghostty_local "$CONFIG_LOCAL"
+# Symbols Nerd Font — provides powerline arrows and icons as a fallback font.
+# Ghostty (and most terminals) automatically use it for glyphs not in the main
+# font, so the Starship prompt arrows render correctly without switching fonts.
+if ! fc-list | grep -qi "Symbols Nerd Font"; then
+    info "Installing Symbols Nerd Font..."
+    VER=$(latest_github_release ryanoasis/nerd-fonts)
+    wget -q "https://github.com/ryanoasis/nerd-fonts/releases/download/v${VER}/NerdFontsSymbolsOnly.zip" \
+        -O /tmp/nerd-symbols.zip
+    unzip -q /tmp/nerd-symbols.zip -d /tmp/nerd-symbols
+    mkdir -p "$HOME/.local/share/fonts"
+    cp /tmp/nerd-symbols/*.ttf "$HOME/.local/share/fonts/"
+    fc-cache -f
+    rm -rf /tmp/nerd-symbols.zip /tmp/nerd-symbols
+else
+    info "Symbols Nerd Font already installed"
 fi
 
 # ── TPM (tmux plugin manager) ─────────────────────────────────────────────────
